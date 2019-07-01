@@ -35,13 +35,17 @@ const Department = conn.define("department", {
   }
 });
 
+Department.hasMany(User)
+
 const syncAndSeed = async () => {
   await conn.sync({ force: true });
-  const userNames = ["Dirty Harry", "Susie", "Dolly"];
-  await Promise.all(userNames.map(name => User.create({ name })));
   const deptNames = ["admin", "service"];
   await Promise.all(deptNames.map(name => Department.create({ name })));
+  const userNames = ["Dirty Harry", "Susie", "Dolly"];
+  await Promise.all(userNames.map(name => User.create({ name })));
 };
+
+
 
 module.exports ={
   syncAndSeed,
