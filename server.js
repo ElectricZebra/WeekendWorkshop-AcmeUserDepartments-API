@@ -80,6 +80,36 @@ app.post('/api/departments/:id?', async(req, res, next) => {
   }
 })
 
+app.delete(('/api/users/:id?'), async (req, res, next) => {
+  try {
+    await User.destroy({
+      where: {
+        id: req.params.id
+      }
+    })
+    const updatedUsers = await User.findAll();
+    res.send(updatedUsers)
+  }
+  catch (ex) {
+    next(ex)
+  }
+})
+
+app.delete(('/api/departments/:id'), async (req, res, next) => {
+  try {
+    console.log(req.params)
+    await Department.destroy({
+      where: {
+        id: req.params.id
+      }
+    })
+    res.end()
+  }
+  catch (ex) {
+    next(ex)
+  }
+})
+
 // app.put('/api/user/:id', (req, res, next) => {
 //   try {
 //     console.log('///// req.body', req.body);
@@ -91,13 +121,6 @@ app.post('/api/departments/:id?', async(req, res, next) => {
 //   }
 // })
 
-// app.delete(('/api/user/:id'), async (req, res, next) => {
-//   try {
-//     const deleteUser = await
-//   }
-//   catch (ex) {
-//     next(ex)
-//   }
-// })
+
 
 app.listen(port, () => console.log(`listening on port ${port}`));
