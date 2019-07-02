@@ -78,26 +78,24 @@ app.post('/api/departments/:id?', async(req, res, next) => {
   catch(ex) {
     next(ex)
   }
-})
+});
 
-app.delete(('/api/users/:id?'), async (req, res, next) => {
+app.delete(('/api/users/:id'), async (req, res, next) => {
   try {
     await User.destroy({
       where: {
         id: req.params.id
       }
     })
-    const updatedUsers = await User.findAll();
-    res.send(updatedUsers)
+    res.end()
   }
   catch (ex) {
     next(ex)
   }
-})
+});
 
 app.delete(('/api/departments/:id'), async (req, res, next) => {
   try {
-    console.log(req.params)
     await Department.destroy({
       where: {
         id: req.params.id
@@ -108,19 +106,49 @@ app.delete(('/api/departments/:id'), async (req, res, next) => {
   catch (ex) {
     next(ex)
   }
+});
+
+app.put('/api/users/:id?', async (req, res, next) => {
+  try {
+    await User.update({
+      name: req.body.name,
+      departmentId: req.body.departmentId ? req.body.departmentId : null },
+      {
+        where: { id: req.body.id }
+      }
+    );
+    const updatedUser = await User.findOne({
+      where: {
+        id: req.body.id
+      }
+    });
+    res.send(updatedUser)
+
+  }
+  catch (ex) {
+    next(ex)
+  }
+});
+
+app.put('/api/departments/:id?', async (req, res, next) => {
+  try {
+    await Department.update({
+      name: req.body.name
+    }, {
+      where: {
+        id: req.params.id
+      }
+    });
+    const updateDept = await Department.findOne({
+      where: {
+        id: req.params.id
+      }
+    })
+    res.send(updateDept)
+  }
+  catch (ex) {
+    next(ex)
+  }
 })
-
-// app.put('/api/user/:id', (req, res, next) => {
-//   try {
-//     console.log('///// req.body', req.body);
-//     res.send('here is something')
-
-//   }
-//   catch (ex) {
-//     next(ex)
-//   }
-// })
-
-
 
 app.listen(port, () => console.log(`listening on port ${port}`));
